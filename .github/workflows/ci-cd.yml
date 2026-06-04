@@ -48,6 +48,7 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
-          source: "index.html,style.css,script.js"
+          source: "src/*"
           target: "/home/ojie.vudse26.cloud/public_html"
+          strip_components: 1
           overwrite: true
