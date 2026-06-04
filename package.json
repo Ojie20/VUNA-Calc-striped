@@ -1,0 +1,55 @@
+{
+  "name": "vuna-calc-striped",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "jest --coverage --coverageReporters=json --coverageReporters=text --coverageReporters=lcov",
+    "test:ci": "jest --coverage --coverageReporters=json-summary --ci --forceExit",
+    "lint": "eslint src/ --ext .js",
+    "lint:fix": "eslint src/ --ext .js --fix",
+    "build": "echo Build step: nothing to transpile for plain Node.js"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 1,
+        "functions": 1,
+        "lines": 50,
+        "statements": 1
+      }
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ojie20/VUNA-Calc-striped.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Ojie20/VUNA-Calc-striped/issues"
+  },
+  "homepage": "https://github.com/Ojie20/VUNA-Calc-striped#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "jsdom": "^29.1.1"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.5",
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.4.0",
+    "globals": "^17.6.0",
+    "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1",
+    "nodemon": "^3.1.14",
+    "supertest": "^7.2.2"
+  }
+}

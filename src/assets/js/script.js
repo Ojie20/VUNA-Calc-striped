@@ -1,9 +1,10 @@
 // ===============================
 // 🧠 SMART RESULT MEMORY FEATURE
 // ===============================
-
-let LAST_RESULT = 0;
-var currentExpression = "";
+const state = {
+  currentExpression: "",
+  LAST_RESULT: 0
+};
 
 // ------------------------------
 // Theme Toggle Logic
@@ -24,7 +25,6 @@ function toggleTheme() {
     localStorage.setItem("theme", "light");
   }
 }
-
 // Set theme on page load from localStorage
 window.addEventListener("DOMContentLoaded", function () {
   const theme = localStorage.getItem("theme");
@@ -56,31 +56,31 @@ const MAX_STEPS = 6;
 // Basic Calculator Functions
 // ------------------------------
 function appendToResult(value) {
-  currentExpression += value.toString();
+  state.currentExpression += value.toString();
   updateResult();
 }
 
 function bracketToResult(value) {
-  currentExpression += value;
+  state.currentExpression += value;
   updateResult();
 }
 
 function backspace() {
-  currentExpression = currentExpression.slice(0, -1);
+  state.currentExpression = state.currentExpression.slice(0, -1);
   updateResult();
 }
 
 function operatorToResult(value) {
   if (value === "^") {
-    currentExpression += "**";
+    state.currentExpression += "**";
   } else {
-    currentExpression += value;
+    state.currentExpression += value;
   }
   updateResult();
 }
 
 function clearResult() {
-  currentExpression = "";
+  state.currentExpression = "";
   updateResult();
 }
 
@@ -100,15 +100,15 @@ function normalizeExpression(expr) {
 }
 
 function percentToResult() {
-  if (!currentExpression) return;
+  if (!state.currentExpression) return;
 
-  const match = currentExpression.match(/(.+?)(\*\*|[+\-*/^])([0-9.]*)$/);
+  const match = state.currentExpression.match(/(.+?)(\*\*|[+\-*/^])([0-9.]*)$/);
 
   if (!match) {
-    const num = parseFloat(currentExpression);
+    const num = parseFloat(state.currentExpression);
     if (isNaN(num)) return;
 
-    currentExpression = (num / 100).toString();
+    state.currentExpression = (num / 100).toString();
   } else {
     const leftPart = match[1];
     const rightPart = match[3];
@@ -128,11 +128,8 @@ function percentToResult() {
 
     const percentVal = (leftVal * rightVal) / 100;
 
-    currentExpression = percentVal.toString();
+    state.currentExpression = percentVal.toString();
   }
-
-  // 🔥 ADD THIS LINE
-  currentExpression += "*";
 
   updateResult();
 }
@@ -141,24 +138,24 @@ function percentToResult() {
 // Calculate Result
 // ------------------------------
 function calculateResult() {
-  if (!currentExpression) return;
+  if (!state.currentExpression) return;
 
   try {
    
     const display = document.getElementById("result");
-    let normalizedExpression = normalizeExpression(currentExpression);
+    let normalizedExpression = normalizeExpression(state.currentExpression);
 
     // 🧠 Replace "ans" with last result automatically
     normalizedExpression = normalizedExpression.replace(
       /\bans\b/gi,
-      LAST_RESULT,
+      state.LAST_RESULT,
     );
 
     // Calculate result
     let result = eval(normalizedExpression);
-    console.log("Calculated result for expression:", currentExpression, "->", result);
+    console.log("Calculated result for expression:", state.currentExpression, "->", result);
     // Save result for future expressions
-    LAST_RESULT = result;
+    state.LAST_RESULT = result;
 
     // Display normally
     display.value = result;
@@ -167,15 +164,28 @@ function calculateResult() {
       throw new Error();
     }
 
-    currentExpression = result.toString();
+    state.currentExpression = result.toString();
     updateResult();
   } catch (e) {
-    currentExpression = "Error";
+    state.currentExpression = "Error";
     updateResult();
   }
 }
 
 
 function updateResult() {
-  document.getElementById("result").value = currentExpression || "0";
+  document.getElementById("result").value = state.currentExpression || "0";
 }
+
+module.exports = {
+  toggleTheme,
+  appendToResult,
+  operatorToResult,
+  clearResult,
+  calculateResult,
+  normalizeExpression,
+  percentToResult,
+  backspace,
+  updateResult,
+  state
+};
