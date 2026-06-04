@@ -7,7 +7,7 @@
     }
 
     body {
-      background: var(--bg-gradient);
+      background: var(blue);
       min-height: 100vh;
       display: flex;
       align-items: center;
