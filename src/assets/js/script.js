@@ -166,6 +166,7 @@ function percentToResult() {
     } catch (e) {
       leftVal = parseFloat(leftPart);
     }
+    
 
     const rightVal = parseFloat(rightPart);
     if (isNaN(leftVal) || isNaN(rightVal)) return;
