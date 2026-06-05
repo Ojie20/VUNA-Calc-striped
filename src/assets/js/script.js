@@ -25,6 +25,8 @@ function toggleTheme() {
     localStorage.setItem("theme", "light");
   }
 }
+
+var inverseMode = false;
 // Set theme on page load from localStorage
 window.addEventListener("DOMContentLoaded", function () {
   const theme = localStorage.getItem("theme");
@@ -84,6 +86,52 @@ function clearResult() {
   updateResult();
 }
 
+function toggleInverseMode() {
+  inverseMode = !inverseMode;
+  document.getElementById("sin-btn").textContent = inverseMode
+    ? "sin⁻¹"
+    : "sin";
+  document.getElementById("cos-btn").textContent = inverseMode
+    ? "cos⁻¹"
+    : "cos";
+  document.getElementById("tan-btn").textContent = inverseMode
+    ? "tan⁻¹"
+    : "tan";
+}
+
+function sinDeg(x) {
+  return Math.sin((x * Math.PI) / 180);
+}
+function cosDeg(x) {
+  return Math.cos((x * Math.PI) / 180);
+}
+function tanDeg(x) {
+  return Math.tan((x * Math.PI) / 180);
+}
+
+function asinDeg(x) {
+  return (Math.asin(x) * 180) / Math.PI;
+}
+function acosDeg(x) {
+  return (Math.acos(x) * 180) / Math.PI;
+}
+function atanDeg(x) {
+  return (Math.atan(x) * 180) / Math.PI;
+}
+
+function appendTrig(func) {
+  state.currentExpression += func + "(";
+  updateResult();
+}
+
+function trigButtonPressed(func) {
+  const map = inverseMode
+    ? { sin: "asin", cos: "acos", tan: "atan" }
+    : { sin: "sin", cos: "cos", tan: "tan" };
+
+  appendTrig(map[func]);
+}
+
 
 function normalizeExpression(expr) {
   return expr
@@ -92,11 +140,7 @@ function normalizeExpression(expr) {
     .replace(/atan\(/g, "atanDeg(")
     .replace(/sin\(/g, "sinDeg(")
     .replace(/cos\(/g, "cosDeg(")
-    .replace(/tan\(/g, "tanDeg(")
-    .replace(/asinh\(/g, "asinh(")
-    .replace(/sinh\(/g, "sinh(")
-    .replace(/\be\b/g, "Math.E")
-    .replace(/\bpi\b/g, "Math.PI");
+    .replace(/tan\(/g, "tanDeg(");
 }
 
 function percentToResult() {
@@ -171,6 +215,44 @@ function calculateResult() {
     updateResult();
   }
 }
+
+document.addEventListener('keydown', function(event) {
+  const key = event.key;
+
+  if (!isNaN(key)) { // Check if the key is a number
+      appendToResult(key);
+  } else if (key === '+' || key === '-' || key === '*' || key === '/') {
+      operatorToResult(key);
+  } else if (key === 'Enter') {
+      calculateResult();
+  } else if (key === 'Backspace') {
+      backspace();
+  } else if (key === 'Escape') {
+      clearResult();
+  } else if (key === '(' || key === ')') {
+      bracketToResult(key);
+  } else if (key === '.') {
+      appendToResult(key);
+  }else if (key === 's') {
+      trigButtonPressed('sin');
+  } else if (key === 'c') {
+      trigButtonPressed('cos');
+  } else if (key === 't') {
+      trigButtonPressed('tan');
+  }
+  else if (key === 'i') {
+      toggleInverseMode();
+  }
+  else if (key === 'A') {
+      trigButtonPressed('sin');
+  }
+  else if (key === 'C') {
+      trigButtonPressed('cos');
+  }
+  else if (key === 'T') {
+      trigButtonPressed('tan');
+  }
+});
 
 
 function updateResult() {
