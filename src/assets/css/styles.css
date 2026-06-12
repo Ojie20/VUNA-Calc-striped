@@ -239,6 +239,17 @@
       z-index: 1000;
     }
 
+    .back-btn{
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
     body.dark-mode {
       background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
       color: #e0e0e0;
